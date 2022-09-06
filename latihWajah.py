@@ -31,4 +31,4 @@ faces, IDs = gambar(wajahDir + '/' + nama)
 faceRecognizer.train(faces, np.array(IDs))
 
 faceRecognizer.write(latihDir + '/training.xml')
-print('Data wajah telah ditrainingkan')
+print('Data wajah telah ditrainingkan neehhhh')

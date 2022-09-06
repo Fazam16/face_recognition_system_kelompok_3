@@ -18,10 +18,9 @@ hasil = ""
 with mic as source:
     print("Sebut nama Anda")
     rekaman = mesinSuara.listen(source) # Mesin melakukan rekaman suara dan memasukan hasil kedalam variabel rekaman
-    print("Ok, Terima kasih yaa")
     try:
         hasil = mesinSuara.recognize_google(rekaman, language="id-ID") # Memakai API google untuk melakukan rekaman suara, dan set bahasa indonesia
-        print(hasil)
+        print("Oke, terima kasih " + hasil)
     except mesinSuara.UnkownValueError: # Jika suara tidak dapat dikenali oleh mesin maka mesin akan melakukan : 
         print("Tidak dapat dideteksi")
     except Exception as e:
@@ -42,7 +41,7 @@ while True: # Perulangan yang berguna untuk menangkap frame per secon
 
     for (x, y, w, h) in muka:
         frame = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 255), 2) # Running retangle untuk mendeteksi wajah
-        namaFile = 'wajah ' + str(hasil) + '.' + str(ambilData) + '.jpg'
+        namaFile = str(hasil) + '.' + str(ambilData) + '.jpg'
         cv2.imwrite(wajahDir + '/' + hasil + '/' + namaFile, frame) # wajahDir = namaFolder yang dituju
         ambilData+=1
 

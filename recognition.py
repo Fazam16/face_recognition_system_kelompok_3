@@ -14,12 +14,12 @@ latihDir = 'latihWajah' # Folder tujuan disimpannya training
 deteksiWajah = cv2.CascadeClassifier('./fileXML/pendeteksiWajah.xml') # src xml mengenai deteksi wajah
 faceRecognizer = cv2.face.LBPHFaceRecognizer_create() # algoritma LBPH
 
-faceRecognizer.read(latihDir + '/training.xml') # Untuk read hasil gambar yang sudah ditraining
-font = cv2.FONT_HERSHEY_DUPLEX # Memilih font untuk menampilkan nama sipemilik wajah
-
 file = open('identitas/namaWong.txt', 'r')
 nama = file.read()
 file.close()
+
+faceRecognizer.read(latihDir + '/training.xml') # Untuk read hasil gambar yang sudah ditraining
+font = cv2.FONT_HERSHEY_DUPLEX # Memilih font untuk menampilkan nama sipemilik wajah
 
 id = 0
 names = ['Tidak diketahui', nama]
@@ -53,6 +53,6 @@ while True: # Perulangan yang berguna untuk menangkap frame per secon
     if filter == 27 or filter == ord('q'): # Pada bagian ini untuk memberi keterangan button kamera untuk di stop
         break
 
-print("Exit")
+print("Selesai yaa :)")
 kamera.release() # Release cache kamera ketika digunakan agar tidak memakan source pada komputer
 cv2.destroyAllWindows() # Menyelesaikan session
