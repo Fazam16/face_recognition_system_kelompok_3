@@ -1,4 +1,3 @@
-from asyncore import read
 import cv2, os, numpy as np
 from PIL import Image
 

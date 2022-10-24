@@ -1,4 +1,3 @@
-from asyncore import read
 import cv2, os, speech_recognition as sr
 
 # Untuk memanggil kamera
