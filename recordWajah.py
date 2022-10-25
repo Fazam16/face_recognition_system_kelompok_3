@@ -1,7 +1,7 @@
 import cv2, os, speech_recognition as sr
 
 # Untuk memanggil kamera
-kamera = cv2.VideoCapture(1) 
+kamera = cv2.VideoCapture(0) 
 # Baca file dari gambar maka masukan src file gambar, jika dari webcam maka masukan index webcam yang kita miliki
 kamera.set(3, 640) # Untuk mengubah lebar kamera
 kamera.set(4, 480) # Untuk mengubah tinggi kamera
@@ -49,7 +49,7 @@ while True: # Perulangan yang berguna untuk menangkap frame per secon
     filter = cv2.waitKey(1) & 0xFF 
     if filter == 27 or filter == ord('q'): # Pada bagian ini untuk memberi keterangan button kamera untuk di stop
         break
-    elif ambilData == 30:
+    elif ambilData == 100:
         break
 
 print("Program Selesai")

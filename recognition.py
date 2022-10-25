@@ -4,7 +4,7 @@ from keras_preprocessing import image
 import cv2, os, numpy as np, speech_recognition as sr
 
 # Untuk memanggil kamera
-kamera = cv2.VideoCapture(1) 
+kamera = cv2.VideoCapture(0) 
 # Baca file dari gambar maka masukan src file gambar, jika dari webcam maka masukan index webcam yang kita miliki
 kamera.set(3, 640) # Untuk mengubah lebar kamera
 kamera.set(4, 480) # Untuk mengubah tinggi kamera
