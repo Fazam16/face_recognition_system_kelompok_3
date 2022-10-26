@@ -4,7 +4,7 @@ from keras_preprocessing import image
 import cv2, os, numpy as np, speech_recognition as sr
 
 # Untuk memanggil kamera
-kamera = cv2.VideoCapture(0) 
+kamera = cv2.VideoCapture(1) 
 # Baca file dari gambar maka masukan src file gambar, jika dari webcam maka masukan index webcam yang kita miliki
 kamera.set(3, 640) # Untuk mengubah lebar kamera
 kamera.set(4, 480) # Untuk mengubah tinggi kamera
@@ -28,7 +28,7 @@ faceRecognizer.read(latihDir + '/training.xml') # Untuk read hasil gambar yang s
 font = cv2.FONT_HERSHEY_DUPLEX # Memilih font untuk menampilkan nama sipemilik wajah
 
 id = 0
-names = ['Unkown', nama]
+names = ['Unknown', nama]
 
 minWidth = 0.1*kamera.get(3)
 minHeight = 0.1*kamera.get(4)
@@ -45,15 +45,15 @@ while True: # Perulangan yang berguna untuk menangkap frame per secon
     muka = deteksiWajah.detectMultiScale(warna, 1.2, 5, minSize=(round(minWidth), round(minHeight))) # frame, scalefactor, min
         
     for (x, y, w, h) in muka :
-        frame = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 255), 2) # Running retangle untuk mendeteksi wajah
         id, cocokGatu = faceRecognizer.predict(warna[y:y+h, x:x+w]) # Kecocokan = 0 berarti gambarnya cocok
-        cocokGatu = cocokGatu - 10
-        if cocokGatu <= 50:
+        if cocokGatu <= 45:
             nameID = names[id] # Identifikasi nama pemilik wajah
             cocokGatuTxt = " {0}%" . format(round(100-cocokGatu))
+            deteksi = (20, 255, 0)
         else:
             nameID = names[0]
             cocokGatuTxt = " {0}%" . format(round(100-cocokGatu))
+            deteksi = (255, 0, 0)
         
         detected_face = frame[int(y):int(y + h), int(x):int(x + w)]
         detected_face = cv2.cvtColor(detected_face, cv2.COLOR_BGR2GRAY)
@@ -65,10 +65,11 @@ while True: # Perulangan yang berguna untuk menangkap frame per secon
         max_index = np.argmax(predictions[0])
         emotion = emosi[max_index]
 
-        cv2.putText(frame, hasil, (0, 25), font, 0.5, (0,0,0,0))
-        cv2.putText(frame, emotion, (int(x + 200), int(y - 5)), font, 0.5, (255, 255, 255), 2)
-        cv2.putText(frame, str(nameID), (x+5, y-5), font, 0.7, (255, 255, 255)) # Meletakkan text nama
-        cv2.putText(frame, str(cocokGatuTxt), (x+5, y-5+h), font, 1, (255, 255, 255)) # Meletakkan text persentase kecocokan
+        frame = cv2.rectangle(frame, (x, y), (x+w, y+h), deteksi, 2) # Running retangle untuk mendeteksi wajah
+        cv2.putText(frame, hasil, (0, 25), font, 0.5, deteksi)
+        cv2.putText(frame, emotion, (int(x + 200), int(y - 5)), font, 0.5, deteksi, 2)
+        cv2.putText(frame, str(nameID), (x+5, y-5), font, 1, deteksi) # Meletakkan text nama
+        cv2.putText(frame, str(cocokGatuTxt), (x+5, y-5+h), font, 1, deteksi) # Meletakkan text persentase kecocokan
     
     cv2.imshow('Recognisi wajah', frame) # Memanggil kamera untuk menampilkan output
     filter = cv2.waitKey(1) & 0xFF
