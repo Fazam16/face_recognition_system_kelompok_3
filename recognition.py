@@ -4,7 +4,7 @@ from keras_preprocessing import image
 import cv2, os, numpy as np, speech_recognition as sr
 
 # Untuk memanggil kamera
-kamera = cv2.VideoCapture(1) 
+kamera = cv2.VideoCapture(0) 
 # Baca file dari gambar maka masukan src file gambar, jika dari webcam maka masukan index webcam yang kita miliki
 kamera.set(3, 640) # Untuk mengubah lebar kamera
 kamera.set(4, 480) # Untuk mengubah tinggi kamera
@@ -12,7 +12,7 @@ kamera.set(4, 480) # Untuk mengubah tinggi kamera
 wajahDir = 'dataWajah' # Folder asal (src)
 latihDir = 'latihWajah' # Folder tujuan disimpannya training
 
-deteksiWajah = cv2.CascadeClassifier('./fileXML/pendeteksiWajah.xml') # src xml mengenai deteksi wajah
+deteksiWajah = cv2.CascadeClassifier('./fileXML/haarcascade_frontalface_default.xml') # src xml mengenai deteksi wajah
 faceRecognizer = cv2.face.LBPHFaceRecognizer_create() # algoritma LBPH
 
 model = model_from_json(open('./fileXML/facial_expression_model_structure.json').read())
@@ -28,7 +28,7 @@ faceRecognizer.read(latihDir + '/training.xml') # Untuk read hasil gambar yang s
 font = cv2.FONT_HERSHEY_DUPLEX # Memilih font untuk menampilkan nama sipemilik wajah
 
 id = 0
-names = ['Unknown', nama]
+names = ['Unknown', 'Fadhil', 'Zaki', 'Rhezi']
 
 minWidth = 0.1*kamera.get(3)
 minHeight = 0.1*kamera.get(4)

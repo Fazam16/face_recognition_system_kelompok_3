@@ -1,33 +1,23 @@
-import cv2, os, numpy as np
+import cv2, os
+import numpy as np
 from PIL import Image
-
-wajahDir = 'dataWajah' # Folder asal (src)
-latihDir = 'latihWajah' # Folder tujuan disimpannya training
-
-file = open('identitas/namaWong.txt', 'r')
-nama = file.read()
-file.close()
-
-def gambar(path): 
-    pathsGambar = [os.path.join(path, f) for f in os.listdir(path)]
-    samples = []
-    idMuka_ = []
-    for pathGambar in pathsGambar:
-        PILImg = Image.open(pathGambar).convert('L') # Convert ke dalam grey
-        imgNum = np.array(PILImg, 'uint8')
-        idMuka = int(os.path.split(pathGambar)[-1].split('.')[1])
-        faces = deteksiMuka.detectMultiScale(imgNum)
-        for (x, y, w, h) in faces:
-            samples.append(imgNum[y:y+h, x:x+w])
-            idMuka_.append(idMuka)
-            return samples, idMuka_
-
-faceRecognizer = cv2.face.LBPHFaceRecognizer_create() # algoritma LBPH
-deteksiMuka = cv2.CascadeClassifier('./fileXML/pendeteksiWajah.xml')
-
-print("Sedang melakukan training wajah")
-faces, IDs = gambar(wajahDir + '/' + nama)
-faceRecognizer.train(faces, np.array(IDs))
-
-faceRecognizer.write(latihDir + '/training.xml')
-print('Data wajah telah ditrainingkan neehhhh')
+recognizer = cv2.face.LBPHFaceRecognizer_create()
+detector = cv2.CascadeClassifier("./fileXML/haarcascade_frontalface_default.xml");
+print("Data sedang ditrainingkan")
+def getImagesWithLabels(path):
+    imagePaths=[os.path.join(path,f) for f in os.listdir(path)]
+    faceSamples=[]
+    Ids=[]
+    for imagePath in imagePaths:
+        pilImage=Image.open(imagePath).convert('L')
+        imageNp=np.array(pilImage,'uint8')
+        Id=int(os.path.split(imagePath)[-1].split(".")[1])
+        faces=detector.detectMultiScale(imageNp)
+        for (x,y,w,h) in faces:
+            faceSamples.append(imageNp[y:y+h,x:x+w])
+            Ids.append(Id)
+    return faceSamples, Ids
+faces, Ids = getImagesWithLabels('dataWajah')
+recognizer.train(faces, np.array(Ids))
+recognizer.save('./latihWajah/training.xml')
+print("Data telah ditrainingkan")

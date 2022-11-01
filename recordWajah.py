@@ -1,14 +1,13 @@
 import cv2, os, speech_recognition as sr
 
 # Untuk memanggil kamera
-kamera = cv2.VideoCapture(1) 
+kamera = cv2.VideoCapture(0) 
 # Baca file dari gambar maka masukan src file gambar, jika dari webcam maka masukan index webcam yang kita miliki
 kamera.set(3, 640) # Untuk mengubah lebar kamera
 kamera.set(4, 480) # Untuk mengubah tinggi kamera
 
-deteksiWajah = cv2.CascadeClassifier('./fileXML/pendeteksiWajah.xml') # src xml mengenai deteksi wajah
+deteksiWajah = cv2.CascadeClassifier('./fileXML/haarcascade_frontalface_default.xml')
 ambilData = 1
-wajahDir = 'dataWajah' #namaFolder
 
 mesinSuara = sr.Recognizer()
 mic = sr.Microphone() 
@@ -29,27 +28,20 @@ namaWong = open('identitas/namaWong.txt', 'w')
 namaWong.write(hasil)
 namaWong.close
 
-buatFolder = r'./dataWajah/' + hasil 
-if not os.path.exists(buatFolder):
-    os.makedirs(buatFolder)
-
 while True: # Perulangan yang berguna untuk menangkap frame per secon
-    retV, frame = kamera.read() # Disini kamera membaca/merekam
-    warna = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # Mengganti warna pada kamera
-    muka = deteksiWajah.detectMultiScale(warna,1.3, 5) # frame, scalefactor, min
-    
-    for (x, y, w, h) in muka:
-        frame = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 255), 2) # Running retangle untuk mendeteksi wajah
-        namaFile = str(hasil) + '.' + str(ambilData) + '.jpg'
-        cv2.imwrite(wajahDir + '/' + hasil + '/' + namaFile, frame) # wajahDir = namaFolder yang dituju
+    check, frame = kamera.read()
+    abu = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    wajah = deteksiWajah.detectMultiScale(abu, 1.3, 5)
+   
+    for(x,y,w,h) in wajah : 
+        cv2.imwrite('./dataWajah/User.' + '3' + '.' + str(ambilData) + '.jpg', frame[y:y+h, x:x+w])
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
         ambilData+=1
-
-    cv2.imshow('webcam', frame) # Memanggil kamera untuk menampilkan output
-
+    cv2.imshow('Face Recognition', frame)
     filter = cv2.waitKey(1) & 0xFF 
     if filter == 27 or filter == ord('q'): # Pada bagian ini untuk memberi keterangan button kamera untuk di stop
         break
-    elif ambilData == 300:
+    elif ambilData == 30:
         break
 
 print("Program Selesai")
