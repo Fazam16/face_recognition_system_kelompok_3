@@ -22,13 +22,17 @@ emosi = ('Marah', 'Jijik', 'Takut', 'Senang', 'Sedih', 'Terkejut','Biasa')
 
 file = open('identitas/namaWong.txt', 'r')
 nama = file.read()
+namaWong = nama.split(',')
 file.close()
+
+names = ['unknown']
+
+if len(namaWong) >= 1:
+    for i in range(len(namaWong)):
+        names.append(namaWong[i])
 
 faceRecognizer.read(latihDir + '/training.xml') # Untuk read hasil gambar yang sudah ditraining
 font = cv2.FONT_HERSHEY_DUPLEX # Memilih font untuk menampilkan nama sipemilik wajah
-
-id = 0
-names = ['Unknown', 'Fadhil', 'Zaki', 'Rhezi']
 
 minWidth = 0.1*kamera.get(3)
 minHeight = 0.1*kamera.get(4)
@@ -36,7 +40,7 @@ minHeight = 0.1*kamera.get(4)
 mesinSuara = sr.Recognizer()
 mic = sr.Microphone() 
 hasil = ""
-
+id = 0
 while True: # Perulangan yang berguna untuk menangkap frame per secon
     
     retV, frame = kamera.read() # Disini kamera membaca/merekam
@@ -79,3 +83,4 @@ while True: # Perulangan yang berguna untuk menangkap frame per secon
 print("Selesai yaa :)")
 kamera.release() # Release cache kamera ketika digunakan agar tidak memakan source pada komputer
 cv2.destroyAllWindows() # Menyelesaikan session
+

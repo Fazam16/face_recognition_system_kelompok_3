@@ -24,9 +24,15 @@ with mic as source:
     except Exception as e:
         print(e)
 
-namaWong = open('identitas/namaWong.txt', 'w')
-namaWong.write(hasil)
+namaWong = open('identitas/namaWong.txt', 'a')
+namaWong.write(hasil+',')
 namaWong.close
+
+nama = open('identitas/namaWong.txt', 'r')
+ambilNama = nama.read()
+splitAmbilNama = ambilNama.split(',')
+idUser = len(splitAmbilNama)
+nama.close
 
 while True: # Perulangan yang berguna untuk menangkap frame per secon
     check, frame = kamera.read()
@@ -34,9 +40,10 @@ while True: # Perulangan yang berguna untuk menangkap frame per secon
     wajah = deteksiWajah.detectMultiScale(abu, 1.3, 5)
    
     for(x,y,w,h) in wajah : 
-        cv2.imwrite('./dataWajah/User.' + '3' + '.' + str(ambilData) + '.jpg', frame[y:y+h, x:x+w])
+        cv2.imwrite('./dataWajah/' + str(hasil) + '.' + str(idUser) + '.' + str(ambilData) + '.jpg', frame[y:y+h, x:x+w])
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
         ambilData+=1
+
     cv2.imshow('Face Recognition', frame)
     filter = cv2.waitKey(1) & 0xFF 
     if filter == 27 or filter == ord('q'): # Pada bagian ini untuk memberi keterangan button kamera untuk di stop
