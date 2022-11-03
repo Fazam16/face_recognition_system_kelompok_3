@@ -36,6 +36,7 @@ nama.close
 
 while True: # Perulangan yang berguna untuk menangkap frame per secon
     check, frame = kamera.read()
+    frame = cv2.flip(frame, 1) # Vertical flip
     abu = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     wajah = deteksiWajah.detectMultiScale(abu, 1.3, 5)
    
@@ -48,7 +49,7 @@ while True: # Perulangan yang berguna untuk menangkap frame per secon
     filter = cv2.waitKey(1) & 0xFF 
     if filter == 27 or filter == ord('q'): # Pada bagian ini untuk memberi keterangan button kamera untuk di stop
         break
-    elif ambilData == 30:
+    elif ambilData == 100:
         break
 
 print("Program Selesai")

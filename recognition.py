@@ -4,7 +4,8 @@ from keras_preprocessing import image
 import cv2, os, numpy as np, speech_recognition as sr
 
 # Untuk memanggil kamera
-kamera = cv2.VideoCapture(0) 
+kamera = cv2.VideoCapture(0)
+ 
 # Baca file dari gambar maka masukan src file gambar, jika dari webcam maka masukan index webcam yang kita miliki
 kamera.set(3, 640) # Untuk mengubah lebar kamera
 kamera.set(4, 480) # Untuk mengubah tinggi kamera
@@ -50,7 +51,7 @@ while True: # Perulangan yang berguna untuk menangkap frame per secon
         
     for (x, y, w, h) in muka :
         id, cocokGatu = faceRecognizer.predict(warna[y:y+h, x:x+w]) # Kecocokan = 0 berarti gambarnya cocok
-        if cocokGatu <= 45:
+        if cocokGatu <= 50:
             nameID = names[id] # Identifikasi nama pemilik wajah
             cocokGatuTxt = " {0}%" . format(round(100-cocokGatu))
             deteksi = (20, 255, 0)
