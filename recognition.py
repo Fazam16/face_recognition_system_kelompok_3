@@ -1,7 +1,7 @@
 from tkinter import font
 from tensorflow.keras.models import model_from_json
 from keras_preprocessing import image
-import cv2, os, numpy as np, speech_recognition as sr
+import cv2, os, numpy as np
 
 # Untuk memanggil kamera
 kamera = cv2.VideoCapture(0)
@@ -38,8 +38,6 @@ font = cv2.FONT_HERSHEY_DUPLEX # Memilih font untuk menampilkan nama sipemilik w
 minWidth = 0.1*kamera.get(3)
 minHeight = 0.1*kamera.get(4)
 
-mesinSuara = sr.Recognizer()
-mic = sr.Microphone() 
 hasil = ""
 id = 0
 while True: # Perulangan yang berguna untuk menangkap frame per secon
@@ -74,7 +72,7 @@ while True: # Perulangan yang berguna untuk menangkap frame per secon
         cv2.putText(frame, hasil, (0, 25), font, 0.5, deteksi)
         cv2.putText(frame, emotion, (int(x + 200), int(y - 5)), font, 0.5, deteksi, 2)
         cv2.putText(frame, str(nameID), (x+5, y-5), font, 1, deteksi) # Meletakkan text nama
-        cv2.putText(frame, str(cocokGatuTxt), (x+5, y-5+h), font, 1, deteksi) # Meletakkan text persentase kecocokan
+        # cv2.putText(frame, str(cocokGatuTxt), (x+5, y-5+h), font, 1, deteksi) # Meletakkan text persentase kecocokan
     
     cv2.imshow('Recognisi wajah', frame) # Memanggil kamera untuk menampilkan output
     filter = cv2.waitKey(1) & 0xFF
