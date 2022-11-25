@@ -31,4 +31,4 @@ print("Data telah ditrainingkan")
 stop = timeit.default_timer()
 lama_eksekusi = stop - start 
 
-print(lama_eksekusi)
+print("Waktu : " , round(lama_eksekusi, 2) , " Seconds")

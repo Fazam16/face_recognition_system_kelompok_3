@@ -19,7 +19,7 @@ model.load_weights('./fileXML/facial_expression_model_weights.h5')
 
 emosi = ('Marah', 'Jijik', 'Takut', 'Senang', 'Sedih', 'Terkejut','Biasa')
 
-file = open('identitas/namaWong.txt', 'r')
+file = open('identitas/namaPengguna.txt', 'r')
 nama = file.read()
 namaWong = nama.split(',')
 file.close()
@@ -49,13 +49,13 @@ def deteksi(frame):
             id, cocokGatu = faceRecognizer.predict(warna[y:y+h, x:x+w]) # Kecocokan = 0 berarti gambarnya cocok
             if cocokGatu <= 50:
                 nameID = names[id] # Identifikasi nama pemilik wajah
-                cocokGatuTxt = " {0}%" . format(round(100-cocokGatu))
+                cocokGatuTxt = " {0}%" . format(round(120-cocokGatu))
                 deteksi = (20, 255, 0)
             else:
                 nameID = names[0]
                 cocokGatuTxt = " {0}%" . format(round(100-cocokGatu))
-                deteksi = (255, 0, 0)
-            
+                deteksi = (255, 0, 0)    
+
             detected_face = frame[int(y):int(y + h), int(x):int(x + w)]
             detected_face = cv2.cvtColor(detected_face, cv2.COLOR_BGR2GRAY)
             detected_face = cv2.resize(detected_face, (48, 48))
@@ -70,7 +70,7 @@ def deteksi(frame):
             frame = cv2.putText(frame, hasil, (0, 25), font, 0.5, deteksi)
             frame = cv2.putText(frame, emotion, (int(x + 200), int(y - 5)), font, 0.5, deteksi, 2)
             frame = cv2.putText(frame, str(nameID), (x+5, y-5), font, 1, deteksi) # Meletakkan text nama
-            # frame = cv2.putText(frame, str(cocokGatuTxt), (x+5, y-5+h), font, 1, deteksi) # Meletakkan text persentase kecocokan
+            frame = cv2.putText(frame, str(cocokGatuTxt), (x+5, y-5+h), font, 1, deteksi) # Meletakkan text persentase kecocokan
     
         filter = cv2.waitKey(1) & 0xFF
         if filter == 27 or filter == ord('q'): # Pada bagian ini untuk memberi keterangan button kamera untuk di stop
@@ -93,6 +93,7 @@ koory = 70
 
 def videostreamRecord():
     import recordWajah
+    import latihWajah
 
 def videostream():
     vd.place(x=koorx, y=koory)   
@@ -123,10 +124,10 @@ def stop():
     vs.stop()
 
 BStart = tk.Button(frame, text ="Rekognisi Wajah", command=videostream, width=20, height=1, bg='#2870ff', fg='#ffffff')
-BStart.place(x=570, y = 570)
+BStart.place(x=770, y = 570)
 
 BRecord = tk.Button(frame, text ="Record Wajah", command=videostreamRecord, width=20, height=1, bg='#2870ff', fg='#ffffff')
-BRecord.place(x=770, y=570)
+BRecord.place(x=570, y=570)
 
 BQuit = tk.Button(frame, text ="Stop", command = stop, width=20, height=1, bg='#2870ff', fg='#ffffff')
 BQuit.place(x=970, y=570)

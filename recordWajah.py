@@ -1,4 +1,32 @@
-import cv2, os, speech_recognition as sr
+import cv2, os, tkinter as tk, timeit
+from tkinter import ttk
+
+def submitNama():
+    return namaUser.get()
+
+window = tk.Tk()
+window.configure(bg="white")
+window.geometry("300x200")
+window.resizable(False, False)
+window.title("Input Nama")
+
+input_frame = ttk.Frame(window)
+input_frame.pack(padx=10, pady=10, fill='x', expand=True)
+
+labelNama = ttk.Label(input_frame, text="Masukan Nama")
+labelNama.pack(padx=10, pady=5, fill='x', expand=True)
+
+namaUser = tk.StringVar()
+entryNama = ttk.Entry(input_frame, textvariable=namaUser)
+entryNama.pack(padx=10, fill='x', expand=True)
+
+submit = ttk.Button(input_frame, text="Submit", command=submitNama)
+submit.pack(fill='x', expand=True, padx=10)
+
+tutup = ttk.Button(input_frame, text="Close", command=window.destroy)
+tutup.pack(fill='x', expand=True, padx=10)
+
+window.mainloop()
 
 # Untuk memanggil kamera
 kamera = cv2.VideoCapture(0) 
@@ -9,30 +37,19 @@ kamera.set(4, 480) # Untuk mengubah tinggi kamera
 deteksiWajah = cv2.CascadeClassifier('./fileXML/haarcascade_frontalface_default.xml')
 ambilData = 1
 
-mesinSuara = sr.Recognizer()
-mic = sr.Microphone() 
-hasil = ""
+hasil = submitNama()
 
-with mic as source:
-    print("Sebut nama Anda")
-    rekaman = mesinSuara.listen(source) # Mesin melakukan rekaman suara dan memasukan hasil kedalam variabel rekaman
-    try:
-        hasil = mesinSuara.recognize_google(rekaman, language="id-ID") # Memakai API google untuk melakukan rekaman suara, dan set bahasa indonesia
-        print("Oke, terima kasih " + hasil)
-    except mesinSuara.UnkownValueError: # Jika suara tidak dapat dikenali oleh mesin maka mesin akan melakukan : 
-        print("Tidak dapat dideteksi")
-    except Exception as e:
-        print(e)
-
-namaWong = open('identitas/namaWong.txt', 'a')
+namaWong = open('identitas/namaPengguna.txt', 'a')
 namaWong.write(hasil+',')
 namaWong.close
 
-nama = open('identitas/namaWong.txt', 'r')
+nama = open('identitas/namaPengguna.txt', 'r')
 ambilNama = nama.read()
 splitAmbilNama = ambilNama.split(',')
 idUser = len(splitAmbilNama)
 nama.close
+
+start = timeit.default_timer()
 
 while True: # Perulangan yang berguna untuk menangkap frame per secon
     check, frame = kamera.read()
@@ -53,6 +70,10 @@ while True: # Perulangan yang berguna untuk menangkap frame per secon
         break
 
 print("Program Selesai")
+stop = timeit.default_timer()
+lama_eksekusi = stop - start 
+
+print("Waktu : " , round(lama_eksekusi, 2))
 kamera.release() # Release cache kamera ketika digunakan agar tidak memakan source pada komputer
 cv2.destroyAllWindows() # Menyelesaikan session
 #Closing pemanggil kamera
